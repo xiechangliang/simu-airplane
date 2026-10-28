@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>苍穹战机 · Sky Wing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- 游戏画面（默认进入即可飞行） -->
+    <section id="screen-game" class="screen active">
+      <canvas id="game-canvas"></canvas>
+
+      <!-- 顶部仪表盘 -->
+      <div class="dash" id="dash">
+        <div class="dash-speed">
+          <span class="dash-label">空速</span>
+          <strong id="dash-kmh">0</strong>
+          <span class="dash-unit">km/h</span>
+        </div>
+        <div class="dash-alt">
+          <span class="dash-label">高度</span>
+          <strong id="dash-alt">800</strong>
+          <span class="dash-unit">m</span>
+        </div>
+        <div class="dash-hp">
+          <span class="dash-label">装甲 / 血量</span>
+          <div class="hp-bar dash-hp-bar"><div id="hp-fill"></div></div>
+        </div>
+        <div class="dash-fuel">
+          <span class="dash-label">油量</span>
+          <div class="fuel-bar dash-fuel-bar"><div id="fuel-fill"></div></div>
+          <span class="fuel-text" id="fuel-text">—</span>
+        </div>
+        <div class="dash-allies hidden" id="dash-allies">
+          <span class="dash-label">友军</span>
+          <strong id="hud-allies">0</strong>
+          <span class="dash-unit">架</span>
+        </div>
+        <div class="dash-meta">
+          <span id="hud-plane">—</span>
+          <span>·</span>
+          <span id="hud-map">—</span>
+          <span>·</span>
+          得分 <strong id="hud-score">0</strong>
+        </div>
+        <div class="dash-actions">
+          <button class="btn btn-ghost" id="btn-menu" type="button">基地</button>
+          <button class="btn btn-ghost" id="btn-pause" type="button">暂停</button>
+        </div>
+      </div>
+
+      <div class="hud-ammo" id="hud-ammo">—</div>
+      <div class="combat-banner hidden" id="combat-banner">战斗中</div>
+
+      <!-- 任务条（主线 + 支线） -->
+      <aside class="mission-rail" id="mission-rail"></aside>
+
+      <div class="land-hint hidden" id="land-hint">
+        <span id="land-hint-text">飞至机场上空 · 高度 ≤120 m · 按住 C 下降即可降落</span>
+        <div class="land-hold-bar hidden" id="land-hold-bar"><i id="land-hold-fill"></i></div>
+      </div>
+
+      <div class="controls-hint">
+        A/D 转向 · W 油门 · S 减速 · R 爬升 · C 下降（机场/浮筒着水按住）· 空格机炮 · Q/E/G 导弹 · ESC 暂停
+      </div>
+      <span id="hud-mode" class="sr-only">自由飞行</span>
+    </section>
+
+    <!-- 基地菜单（飞行中打开） -->
+    <section id="screen-menu" class="screen">
+      <div class="sky-layer"></div>
+      <div class="menu-content">
+        <p class="brand">SKY WING</p>
+        <h1 class="title">苍穹战机</h1>
+        <p class="tagline">驾驶战机 · 征服群岛 · 挑战评级极限</p>
+        <div class="menu-actions">
+          <button class="btn btn-primary" data-action="resume">返回飞行</button>
+          <button class="btn btn-primary" data-action="hangar">机库改装</button>
+          <button class="btn" data-action="modes">作战模式</button>
+          <button class="btn" data-action="arsenal">武器库</button>
+          <button class="btn" data-action="maps">群岛地图</button>
+          <button class="btn" data-action="missions">主线 / 支线任务</button>
+          <button class="btn" data-action="airline">我的航空公司</button>
+        </div>
+        <div class="player-brief" id="player-brief"></div>
+      </div>
+    </section>
+
+    <!-- 机库 -->
+    <section id="screen-hangar" class="screen">
+      <header class="panel-header">
+        <button class="btn btn-ghost" data-action="back">← 返回</button>
+        <h2>机库</h2>
+        <span class="hint">底部进入「定制」可强化属性与换装</span>
+      </header>
+      <div class="hangar-layout">
+        <aside class="plane-list" id="plane-list"></aside>
+        <article class="plane-detail" id="plane-detail"></article>
+      </div>
+    </section>
+
+    <!-- 定制页 -->
+    <section id="screen-custom" class="screen">
+      <header class="panel-header">
+        <button class="btn btn-ghost" data-action="back-hangar">← 返回机库</button>
+        <h2 id="custom-title">定制</h2>
+        <span class="hint">属性从均值起步，付费强化；武器需已拥有</span>
+      </header>
+      <div class="custom-page" id="custom-page"></div>
+    </section>
+
+    <!-- 武器库 -->
+    <section id="screen-arsenal" class="screen">
+      <header class="panel-header">
+        <button class="btn btn-ghost" data-action="back">← 返回</button>
+        <h2>武器库</h2>
+        <span class="hint">购买武器后，在机库挂点改装</span>
+      </header>
+      <div class="arsenal-list" id="arsenal-list"></div>
+    </section>
+
+    <!-- 模式选择 -->
+    <section id="screen-modes" class="screen">
+      <header class="panel-header">
+        <button class="btn btn-ghost" data-action="back">← 返回</button>
+        <h2>作战模式</h2>
+        <span class="hint">多种玩法自由切换</span>
+      </header>
+      <div class="mode-grid" id="mode-grid"></div>
+    </section>
+
+    <!-- 地图 -->
+    <section id="screen-maps" class="screen">
+      <header class="panel-header">
+        <button class="btn btn-ghost" data-action="back">← 返回</button>
+        <h2>群岛地图</h2>
+        <span class="hint">默认「两岛一陆」；进阶图小岛/小礁更多</span>
+      </header>
+      <div class="map-grid" id="map-grid"></div>
+    </section>
+
+    <!-- 任务 -->
+    <section id="screen-missions" class="screen">
+      <header class="panel-header">
+        <button class="btn btn-ghost" data-action="back">← 返回</button>
+        <h2>主线 / 支线任务</h2>
+        <span class="hint" id="mission-date"></span>
+      </header>
+      <div class="mission-list" id="mission-list"></div>
+    </section>
+
+    <!-- 出战准备 -->
+    <section id="screen-prepare" class="screen">
+      <header class="panel-header">
+        <button class="btn btn-ghost" data-action="back-modes">← 返回</button>
+        <h2 id="prepare-title">出战准备</h2>
+        <span class="hint" id="prepare-hint"></span>
+      </header>
+      <div class="prepare-layout">
+        <div class="prepare-plane" id="prepare-plane"></div>
+        <div class="prepare-map" id="prepare-map"></div>
+        <div class="prepare-loadout" id="prepare-loadout"></div>
+        <button class="btn btn-primary btn-launch" id="btn-launch">起飞</button>
+      </div>
+    </section>
+
+    <!-- 航空公司 -->
+    <section id="screen-airline" class="screen">
+      <header class="panel-header">
+        <button class="btn btn-ghost" data-action="back" type="button">← 返回</button>
+        <h2>我的航空公司</h2>
+        <span class="hint" id="airline-hint">创立公司 · 购入民机 · 招募飞行员</span>
+      </header>
+      <div class="airline-tabs">
+        <button class="btn btn-primary" data-airline-tab="home" type="button">公司</button>
+        <button class="btn" data-airline-tab="fleet" type="button">机队采购</button>
+        <button class="btn" data-airline-tab="pilots" type="button">飞行员</button>
+        <button class="btn" data-airline-tab="tower" type="button">塔台指挥</button>
+      </div>
+      <div class="airline-page" id="airline-page"></div>
+    </section>
+
+    <!-- 塔台指挥 -->
+    <section id="screen-tower" class="screen">
+      <header class="panel-header tower-header">
+        <button class="btn btn-ghost" data-tower="exit" type="button">← 返回航空公司</button>
+        <h2>塔台指挥 · 航司机场</h2>
+        <div class="tower-header-meta">
+          <span>资金 <strong id="tower-funds">0</strong></span>
+          <span>降落 <strong id="tower-landings">0</strong></span>
+          <span>起飞 <strong id="tower-takeoffs">0</strong></span>
+          <span id="tower-facilities">—</span>
+          <button class="btn" data-tower="auto" type="button" id="btn-tower-auto">自动指挥：关</button>
+          <button class="btn btn-ghost" data-tower="pause" type="button">暂停</button>
+        </div>
+      </header>
+      <div class="tower-alert hidden" id="tower-alert"></div>
+      <div class="tower-layout">
+        <div class="tower-main">
+          <canvas id="tower-view" class="tower-view"></canvas>
+          <div class="tower-buildbar" id="tower-buildbar"></div>
+        </div>
+        <aside class="tower-side">
+          <div class="tower-radar-wrap">
+            <canvas id="tower-radar" class="tower-radar"></canvas>
+          </div>
+          <h4 class="tower-side-title">航班列表</h4>
+          <div class="tower-traffic" id="tower-traffic"></div>
+          <h4 class="tower-side-title">指挥指令</h4>
+          <div class="tower-commands" id="tower-commands"></div>
+          <h4 class="tower-side-title">塔台日志</h4>
+          <div class="tower-log" id="tower-log"></div>
+        </aside>
+      </div>
+    </section>
+
+    <div id="overlay" class="overlay hidden">
+      <div class="overlay-card" id="overlay-card"></div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/airline.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/tower.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

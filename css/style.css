@@ -1,0 +1,1511 @@
+:root {
+  --sky-deep: #0a1628;
+  --sky-mid: #123a5c;
+  --sky-light: #1e6b9a;
+  --foam: #c8e6f5;
+  --steel: #8aa4b8;
+  --amber: #e8a838;
+  --amber-hot: #ffc857;
+  --danger: #e85d4c;
+  --ok: #3db88a;
+  --panel: rgba(8, 22, 40, 0.82);
+  --line: rgba(200, 230, 245, 0.18);
+  --text: #e8f4fc;
+  --muted: #8fb0c8;
+  --tier-low: #6b7c8a;
+  --tier-c: #7a9e6e;
+  --tier-b: #4a9fd4;
+  --tier-a: #c9a227;
+  --tier-s: #e85d4c;
+  --font-display: "Orbitron", "Noto Sans SC", sans-serif;
+  --font-body: "Noto Sans SC", system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  background: var(--sky-deep);
+  color: var(--text);
+  font-family: var(--font-body);
+  overflow: hidden;
+}
+
+#app {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.screen {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  background:
+    radial-gradient(ellipse 120% 80% at 50% -10%, #1a5080 0%, transparent 55%),
+    linear-gradient(180deg, #0c2138 0%, #071018 100%);
+}
+
+.screen.active {
+  display: flex;
+}
+
+/* —— 主菜单 —— */
+#screen-menu {
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.sky-layer {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(232, 168, 56, 0.12), transparent 40%),
+    radial-gradient(circle at 80% 20%, rgba(30, 107, 154, 0.35), transparent 45%),
+    linear-gradient(180deg, #154868 0%, #0a1628 55%, #061018 100%);
+  animation: skyDrift 18s ease-in-out infinite alternate;
+}
+
+.sky-layer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(1px 1px at 42% 32%, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1.5px 1.5px at 68% 14%, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(1px 1px at 88% 40%, rgba(255, 255, 255, 0.45), transparent),
+    radial-gradient(1px 1px at 28% 70%, rgba(255, 255, 255, 0.35), transparent);
+  opacity: 0.85;
+}
+
+@keyframes skyDrift {
+  from { transform: scale(1) translateY(0); }
+  to { transform: scale(1.04) translateY(-12px); }
+}
+
+.menu-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 2rem;
+  max-width: 520px;
+  animation: riseIn 0.8s ease-out;
+}
+
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 8vw, 3.6rem);
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: var(--amber-hot);
+  text-shadow: 0 0 40px rgba(232, 168, 56, 0.35);
+  line-height: 1.1;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 3vw, 1.35rem);
+  font-weight: 500;
+  letter-spacing: 0.45em;
+  color: var(--foam);
+  margin: 0.6rem 0 0.8rem;
+}
+
+.tagline {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-bottom: 2.2rem;
+}
+
+.menu-actions {
+  display: grid;
+  gap: 0.7rem;
+  margin-bottom: 1.8rem;
+}
+
+.player-brief {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.6;
+  border-top: 1px solid var(--line);
+  padding-top: 1rem;
+}
+
+.player-brief strong {
+  color: var(--amber);
+}
+
+/* —— 按钮 —— */
+.btn {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: rgba(18, 58, 92, 0.55);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.85rem 1.4rem;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+  letter-spacing: 0.06em;
+}
+
+.btn:hover {
+  background: rgba(30, 107, 154, 0.55);
+  border-color: rgba(200, 230, 245, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #c9891e 0%, #e8a838 50%, #f0c060 100%);
+  border-color: transparent;
+  color: #1a1208;
+  font-weight: 700;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #d99828 0%, #f0b848 50%, #f8d070 100%);
+  border-color: transparent;
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: transparent;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.btn-ghost:hover {
+  color: var(--text);
+  background: transparent;
+  transform: none;
+}
+
+.btn-launch {
+  width: 100%;
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
+  padding: 1rem;
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* —— 面板通用 —— */
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.4rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--panel);
+  flex-shrink: 0;
+}
+
+.panel-header h2 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  letter-spacing: 0.12em;
+  flex: 1;
+}
+
+.panel-header .hint {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+/* —— 机库 —— */
+.hangar-layout {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(200px, 280px) 1fr;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.plane-list {
+  overflow-y: auto;
+  border-right: 1px solid var(--line);
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.plane-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid transparent;
+  background: rgba(18, 58, 92, 0.35);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.plane-card:hover,
+.plane-card.selected {
+  border-color: var(--amber);
+  background: rgba(30, 107, 154, 0.4);
+}
+
+.plane-card.locked {
+  opacity: 0.45;
+}
+
+.plane-card .tier-badge {
+  flex-shrink: 0;
+}
+
+.plane-card .meta {
+  min-width: 0;
+}
+
+.plane-card .meta strong {
+  display: block;
+  font-size: 0.95rem;
+}
+
+.plane-card .meta span {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.plane-detail {
+  overflow-y: auto;
+  padding: 1.5rem 2rem;
+}
+
+.detail-hero {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.plane-preview {
+  width: 140px;
+  height: 100px;
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--line);
+  position: relative;
+  overflow: hidden;
+}
+
+.plane-preview canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.detail-info h3 {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.4rem;
+}
+
+.detail-info .desc {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  margin: 0.6rem 0 1rem;
+}
+
+.stat-grid {
+  display: grid;
+  gap: 0.55rem;
+  max-width: 420px;
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: 72px 1fr 40px;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.stat-bar {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.stat-bar > i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--sky-light), var(--amber));
+}
+
+.tier-badge {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid currentColor;
+}
+
+.tier-low { color: var(--tier-low); }
+.tier-c { color: var(--tier-c); }
+.tier-c-plus { color: #8fbf7e; }
+.tier-b { color: var(--tier-b); }
+.tier-b-plus { color: #6bb8e8; }
+.tier-a { color: var(--tier-a); }
+.tier-a-plus { color: #e8c040; }
+.tier-s { color: var(--tier-s); }
+.tier-s-plus { color: #ff7a6a; }
+
+.detail-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.section-title {
+  margin: 1.4rem 0 0.7rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.loadout-list {
+  display: grid;
+  gap: 0.45rem;
+  max-width: 480px;
+}
+
+.loadout-row {
+  display: grid;
+  grid-template-columns: 88px 1fr auto;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.25);
+  font-size: 0.85rem;
+}
+
+.loadout-row.clickable {
+  cursor: pointer;
+}
+
+.loadout-row.clickable:hover {
+  border-color: var(--amber);
+}
+
+.loadout-row.locked-slot {
+  opacity: 0.72;
+  cursor: pointer;
+}
+
+.slot-lock {
+  margin-left: 0.4rem;
+  font-size: 0.7rem;
+  color: var(--danger);
+}
+
+.custom-panel {
+  margin: 1rem 0 0.5rem;
+  max-width: 520px;
+}
+
+.custom-list {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.custom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--line);
+  background: rgba(8, 22, 40, 0.55);
+}
+
+.custom-row.unlocked {
+  border-color: rgba(61, 184, 138, 0.4);
+  color: var(--ok);
+  font-size: 0.85rem;
+}
+
+.custom-row p {
+  margin-top: 0.25rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.custom-row .btn {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.hangar-custom-foot {
+  margin-top: 1.8rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--line);
+  max-width: 480px;
+}
+
+.btn-custom-enter {
+  width: 100%;
+  font-size: 1.1rem;
+  padding: 1rem;
+  letter-spacing: 0.2em;
+}
+
+.custom-page {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.25rem 1.5rem 2rem;
+  max-width: 720px;
+}
+
+.slot-type {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.slot-dmg {
+  color: var(--amber);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+}
+
+.arsenal-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.25rem;
+  display: grid;
+  gap: 0.75rem;
+  align-content: start;
+}
+
+.arsenal-cat {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+  margin-top: 0.5rem;
+  color: var(--foam);
+}
+
+.weapon-card {
+  border: 1px solid var(--line);
+  background: rgba(8, 22, 40, 0.65);
+  padding: 1rem 1.15rem;
+}
+
+.weapon-card.owned {
+  border-color: rgba(61, 184, 138, 0.35);
+}
+
+.weapon-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.4rem;
+}
+
+.dmg-tag {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  color: var(--amber);
+}
+
+.weapon-card p {
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.weapon-meta {
+  margin-top: 0.55rem;
+  font-size: 0.75rem;
+  color: var(--steel);
+}
+
+.weapon-card .btn {
+  margin-top: 0.7rem;
+}
+
+.slot-opt-list {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.9rem;
+  text-align: left;
+}
+
+.mini-load {
+  font-size: 0.85rem;
+  color: var(--foam);
+  padding: 0.25rem 0;
+}
+
+.hud-ammo {
+  position: absolute;
+  top: 5.6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.72rem;
+  color: var(--foam);
+  max-width: 90%;
+  line-height: 1.35;
+  text-align: center;
+  pointer-events: none;
+  z-index: 6;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* —— 顶部仪表盘 —— */
+.dash {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 8;
+  display: grid;
+  grid-template-columns: auto auto 1fr auto auto auto;
+  gap: 0.75rem 1.1rem;
+  align-items: end;
+  padding: 0.65rem 1rem 0.75rem;
+  background: linear-gradient(180deg, rgba(4, 12, 22, 0.82), rgba(4, 12, 22, 0.35) 70%, transparent);
+  pointer-events: none;
+}
+
+.dash .btn {
+  pointer-events: auto;
+}
+
+.dash-label {
+  display: block;
+  font-size: 0.65rem;
+  color: var(--muted);
+  letter-spacing: 0.14em;
+  margin-bottom: 0.15rem;
+}
+
+.dash-speed strong,
+.dash-alt strong {
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  color: var(--amber-hot);
+  line-height: 1;
+}
+
+.dash-unit {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-left: 0.2rem;
+}
+
+.dash-hp,
+.dash-fuel {
+  min-width: 140px;
+}
+
+.dash-hp-bar,
+.dash-fuel-bar {
+  height: 10px;
+  width: 100%;
+}
+
+.dash-allies {
+  min-width: 64px;
+}
+
+.dash-allies strong {
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  color: #3db88a;
+  line-height: 1;
+}
+
+.dash-allies.hidden {
+  display: none;
+}
+
+.dash-meta {
+  font-size: 0.75rem;
+  color: var(--muted);
+  align-self: center;
+}
+
+.dash-meta strong {
+  color: var(--amber);
+  font-family: var(--font-display);
+}
+
+.dash-actions {
+  display: flex;
+  gap: 0.35rem;
+  align-self: center;
+}
+
+.mission-rail {
+  position: absolute;
+  top: 5.8rem;
+  left: 0.75rem;
+  width: min(260px, 42vw);
+  display: grid;
+  gap: 0.4rem;
+  z-index: 7;
+  pointer-events: none;
+}
+
+.mission-chip {
+  pointer-events: auto;
+  background: rgba(8, 22, 40, 0.78);
+  border: 1px solid var(--line);
+  padding: 0.45rem 0.6rem;
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+
+.mission-chip.main {
+  border-color: rgba(232, 168, 56, 0.45);
+}
+
+.mission-chip.side {
+  border-color: rgba(74, 159, 212, 0.45);
+}
+
+.mission-chip.done {
+  border-color: rgba(61, 184, 138, 0.55);
+  cursor: pointer;
+}
+
+.mission-chip .tag {
+  display: inline-block;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: var(--amber);
+  margin-right: 0.35rem;
+}
+
+.mission-chip.side .tag {
+  color: #6bb8e8;
+}
+
+.mission-chip strong {
+  display: inline;
+  font-weight: 600;
+}
+
+.mission-chip .prog {
+  display: block;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+
+.mission-chip .claim {
+  display: block;
+  color: var(--ok);
+  margin-top: 0.2rem;
+}
+
+.mission-chip.muted {
+  color: var(--muted);
+}
+
+.btn-land {
+  display: none !important;
+}
+
+.combat-banner {
+  position: absolute;
+  top: 5.2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 8;
+  background: rgba(120, 30, 28, 0.88);
+  border: 1px solid rgba(232, 93, 76, 0.7);
+  color: #ffc8c0;
+  font-size: 0.82rem;
+  padding: 0.45rem 0.9rem;
+  max-width: min(520px, 86vw);
+  text-align: center;
+  pointer-events: none;
+  letter-spacing: 0.04em;
+}
+
+.btn-land.hidden,
+.land-hint.hidden,
+.hidden {
+  display: none !important;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+@media (max-width: 900px) {
+  .dash {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.45rem 0.8rem;
+  }
+
+  .dash-meta,
+  .dash-actions {
+    grid-column: 1 / -1;
+  }
+
+  .mission-rail {
+    top: auto;
+    bottom: 5.5rem;
+    left: 0.5rem;
+    width: min(220px, 48vw);
+  }
+}
+
+.fuel-note {
+  margin-top: 0.55rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+  max-width: 420px;
+  line-height: 1.45;
+}
+
+.fuel-panel {
+  position: absolute;
+  left: 1rem;
+  bottom: 2.4rem;
+  width: 160px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.fuel-label {
+  font-size: 0.72rem;
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  margin-bottom: 0.3rem;
+}
+
+.fuel-bar {
+  height: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+#fuel-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #1e6b9a, #3db88a);
+  transition: width 0.15s linear;
+}
+
+#fuel-fill.low {
+  background: linear-gradient(90deg, #e85d4c, #e8a838);
+}
+
+#fuel-fill.empty {
+  background: #5a3030;
+  width: 0% !important;
+}
+
+.fuel-text {
+  margin-top: 0.3rem;
+  font-size: 0.75rem;
+  color: var(--foam);
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
+}
+
+.land-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 3.2rem;
+  transform: translateX(-50%);
+  min-width: 240px;
+  max-width: 90%;
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--amber-hot);
+  pointer-events: none;
+  z-index: 5;
+  background: rgba(8, 22, 40, 0.7);
+  padding: 0.45rem 0.8rem;
+  border: 1px solid rgba(232, 168, 56, 0.35);
+  display: grid;
+  gap: 0.35rem;
+  justify-items: center;
+}
+
+.land-hint.hidden {
+  display: none;
+}
+
+.land-hold-bar {
+  width: min(200px, 65vw);
+  height: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+
+.land-hold-bar.hidden {
+  display: none;
+}
+
+.land-hold-bar i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--amber), #ffc857);
+}
+
+.land-bar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  margin-bottom: 0.35rem;
+  overflow: hidden;
+}
+
+#land-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--ok);
+  transition: width 0.1s linear;
+}
+
+/* —— 模式 / 地图 / 任务 —— */
+.mode-grid,
+.map-grid,
+.mission-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.25rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.mode-grid {
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  align-content: start;
+}
+
+.map-grid {
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  align-content: start;
+}
+
+.mode-card,
+.map-card,
+.mission-card {
+  background: rgba(8, 22, 40, 0.65);
+  border: 1px solid var(--line);
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.15s;
+}
+
+.mode-card:hover,
+.map-card:hover:not(.locked),
+.mission-card:hover:not(.done) {
+  border-color: var(--amber);
+  transform: translateY(-2px);
+}
+
+.mode-card h3,
+.map-card h3,
+.mission-card h3 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.45rem;
+}
+
+.mode-card p,
+.map-card p,
+.mission-card p {
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.mode-card .mode-tag {
+  display: inline-block;
+  margin-top: 0.8rem;
+  font-size: 0.72rem;
+  color: var(--amber);
+  letter-spacing: 0.1em;
+}
+
+.map-card.locked,
+.mission-card.done {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.map-status {
+  margin-top: 0.7rem;
+  font-size: 0.78rem;
+  color: var(--ok);
+}
+
+.map-card.locked .map-status {
+  color: var(--danger);
+}
+
+.mission-card .reward {
+  margin-top: 0.7rem;
+  font-size: 0.8rem;
+  color: var(--amber);
+}
+
+/* —— 出战准备 —— */
+.prepare-layout {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  max-width: 640px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.prepare-block {
+  border: 1px solid var(--line);
+  background: rgba(8, 22, 40, 0.55);
+  padding: 1rem 1.2rem;
+}
+
+.prepare-block h4 {
+  font-size: 0.75rem;
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  margin-bottom: 0.6rem;
+}
+
+.prepare-block select {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--line);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  padding: 0.65rem 0.75rem;
+  outline: none;
+}
+
+.prepare-block select:focus {
+  border-color: var(--amber);
+}
+
+/* —— 游戏 HUD —— */
+#screen-game {
+  background: #000;
+}
+
+#game-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: none;
+}
+
+.hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0.75rem 1rem;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.55), transparent);
+}
+
+.hud-left,
+.hud-right,
+.hud-center {
+  pointer-events: auto;
+}
+
+.hud-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.hud-item {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.hud-item strong {
+  display: block;
+  color: var(--foam);
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.hud-center {
+  text-align: center;
+  min-width: 180px;
+}
+
+.hp-bar {
+  width: 180px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.12);
+  margin: 0 auto 0.35rem;
+  overflow: hidden;
+}
+
+#hp-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, var(--danger), var(--ok));
+  transition: width 0.2s;
+}
+
+.hud-score {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.hud-score strong {
+  color: var(--amber-hot);
+  font-family: var(--font-display);
+}
+
+.controls-hint {
+  position: absolute;
+  bottom: 0.8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.72rem;
+  color: rgba(200, 230, 245, 0.45);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* —— 遮罩 —— */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 10, 18, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  backdrop-filter: blur(4px);
+}
+
+.overlay.hidden {
+  display: none;
+}
+
+.overlay-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  padding: 2rem;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+}
+
+.overlay-card h3 {
+  font-family: var(--font-display);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.75rem;
+}
+
+.overlay-card p,
+.overlay-body {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  margin-bottom: 1.4rem;
+}
+
+.overlay-card {
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.overlay-card .actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+/* —— 塔台指挥 —— */
+#screen-tower {
+  z-index: 20;
+  pointer-events: auto;
+}
+
+#screen-tower .btn,
+#screen-tower .tower-ac {
+  pointer-events: auto;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+}
+
+.tower-header {
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  pointer-events: auto;
+}
+
+.airline-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.6rem 1.25rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.airline-page {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 1.25rem 2rem;
+}
+
+.airline-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.airline-card {
+  background: rgba(8, 22, 40, 0.75);
+  border: 1px solid var(--line);
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.65rem;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.airline-card h3 {
+  font-size: 1rem;
+}
+
+.airline-price {
+  color: var(--amber);
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+}
+
+.airline-label {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.airline-input {
+  background: rgba(4, 12, 22, 0.8);
+  border: 1px solid var(--line);
+  color: var(--text);
+  padding: 0.5rem 0.65rem;
+  font-size: 0.9rem;
+  max-width: 280px;
+}
+
+.airline-input-sm {
+  max-width: 110px;
+}
+
+.airline-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+}
+
+.airline-duty {
+  font-size: 0.82rem;
+  color: var(--amber-hot, #ffc857);
+}
+
+.airline-duty-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.airline-duty-form .airline-input {
+  max-width: 160px;
+  font-size: 0.78rem;
+  padding: 0.35rem 0.45rem;
+}
+
+.tower-alert {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  padding: 0.45rem 1rem;
+  background: rgba(120, 30, 28, 0.9);
+  border-bottom: 1px solid rgba(232, 93, 76, 0.7);
+  color: #ffc8c0;
+  font-size: 0.82rem;
+  pointer-events: auto;
+  z-index: 5;
+}
+
+.tower-alert.hidden {
+  display: none;
+}
+
+.tower-alert .btn {
+  font-size: 0.75rem;
+  padding: 0.35rem 0.6rem;
+}
+
+.tower-header-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.tower-header-meta strong {
+  color: var(--amber);
+  font-family: var(--font-display);
+}
+
+.tower-layout {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.tower-main {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-right: 1px solid var(--line);
+}
+
+.tower-view {
+  flex: 1;
+  width: 100%;
+  min-height: 240px;
+  background: #0a1c18;
+  display: block;
+}
+
+.tower-buildbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.65rem 1rem;
+  border-top: 1px solid var(--line);
+  background: rgba(4, 12, 22, 0.6);
+}
+
+.tower-buildbar .btn {
+  font-size: 0.75rem;
+  padding: 0.4rem 0.6rem;
+}
+
+.btn-danger {
+  background: rgba(232, 93, 76, 0.85);
+  border-color: rgba(232, 93, 76, 0.9);
+  color: #fff;
+}
+
+.btn-danger:hover {
+  filter: brightness(1.08);
+}
+
+.tower-ac.emergency {
+  border-color: rgba(232, 93, 76, 0.75);
+  background: rgba(232, 93, 76, 0.12);
+}
+
+.tower-side {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0.75rem;
+  gap: 0.45rem;
+}
+
+.tower-radar-wrap {
+  aspect-ratio: 1;
+  max-height: 280px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.tower-radar {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: 1px solid rgba(61, 184, 138, 0.35);
+  border-radius: 50%;
+  background: #041018;
+}
+
+.tower-side-title {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin-top: 0.25rem;
+}
+
+.tower-traffic {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-height: 160px;
+  overflow-y: auto;
+}
+
+.tower-ac {
+  text-align: left;
+  background: rgba(8, 22, 40, 0.75);
+  border: 1px solid var(--line);
+  color: var(--text);
+  padding: 0.4rem 0.55rem;
+  display: grid;
+  gap: 0.1rem;
+  cursor: pointer;
+  font-size: 0.78rem;
+}
+
+.tower-ac span {
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.tower-ac.selected {
+  border-color: var(--amber);
+  background: rgba(232, 168, 56, 0.12);
+}
+
+.tower-empty,
+.tower-hint {
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.tower-commands {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.tower-cmd-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.tower-cmd-row .btn {
+  font-size: 0.78rem;
+  padding: 0.4rem 0.65rem;
+}
+
+.tower-sel-head {
+  font-size: 0.9rem;
+}
+
+.tower-log {
+  flex: 1;
+  min-height: 80px;
+  overflow-y: auto;
+  font-size: 0.72rem;
+  color: var(--foam);
+  line-height: 1.45;
+  background: rgba(4, 12, 22, 0.5);
+  border: 1px solid var(--line);
+  padding: 0.45rem 0.55rem;
+}
+
+/* —— 响应式 —— */
+@media (max-width: 720px) {
+  .hangar-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  .plane-list {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+    gap: 0.5rem;
+  }
+
+  .plane-card {
+    flex-shrink: 0;
+    min-width: 160px;
+    margin-bottom: 0;
+  }
+
+  .panel-header .hint {
+    display: none;
+  }
+
+  .controls-hint {
+    font-size: 0.65rem;
+  }
+
+  .tower-layout {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+
+  .tower-main {
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+    min-height: 280px;
+  }
+
+  .tower-radar-wrap {
+    max-height: 220px;
+  }
+}
